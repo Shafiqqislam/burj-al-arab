@@ -23,9 +23,10 @@ const Login = () => {
             .then((result) => {
                 const {displayName,email}= result.user;
                 const signedInUser={name:displayName,email};
-                console.log(signedInUser);
+                // console.log(signedInUser);
                 setLoggedInUser(signedInUser);
-                history.replace(from);
+                storeAuthToken();
+               
               
             }).catch((error) => {
                 var errorCode = error.code;
@@ -34,6 +35,16 @@ const Login = () => {
                 console.log(errorCode,errorMessage,email);
               
             });
+    }
+    const storeAuthToken=()=>{
+        firebase.auth().currentUser.getIdToken(/* forceRefresh */ true)
+        .then(function(idToken) {
+            sessionStorage.setItem('token',idToken);
+            history.replace(from);
+        //    console.log(idToken)
+          }).catch(function(error) {
+            // Handle error
+          });
     }
     return (
         <div>
